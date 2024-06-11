@@ -1,6 +1,10 @@
+// import
 import express from 'express';
-import { db } from './db.mjs';
-import { getUser, getUserById } from './user_dao.mjs';
+import morgan from 'morgan';
+import cors from 'cors';
+//import {check, validationResult} from 'express-validator';
+import {getUser, getUserById} from './user_dao.mjs';
+
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import session from 'express-session';
@@ -12,22 +16,27 @@ const PORT = 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session configuration
-app.use(session({
-  secret: 'shhhhh... it\'s a secret!',
-  resave: false,
-  saveUninitialized: false,
-}));
+
+// middleware
+app.use(express.json());
+app.use(morgan('dev'));
+
+// Session Configuration
+// set up and enable CORS -- UPDATED
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200,
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 // Passport configuration
-passport.use(new LocalStrategy(async (username, password, done) => {
-  try {
-    const user = await getUser(username, password);
-    if (!user) return done(null, false, { message: 'Incorrect username or password.' });
-    return done(null, user);
-  } catch (err) {
-    return done(err);
-  }
+passport.use(new LocalStrategy(async function verify(username, password, cb) {
+  const user = await getUser(username, password);
+  if(!user)
+    return cb(null, false, 'Incorrect username or password.');
+    
+  return cb(null, user);
 }));
 
 passport.serializeUser((user, done) => {
@@ -43,20 +52,31 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(session({
+  secret: "shhhhh... it's a secret!",
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(passport.authenticate('session'));
+
+
+/* ------------------------------------------------------- ROUTES */
 
 // Authentication routes
 app.post('/api/sessions', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
-    if (!user) return res.status(401).json(info);
-    req.login(user, err => {
+
+    if (!user) return res.status(401).json(info);// display wrong login messages
+
+    req.login(user, err => {    // success, perform the login
       if (err) return next(err);
+      // req.user contains the authenticated user, we send all the user info back
       return res.status(201).json(req.user);
     });
   })(req, res, next);
 });
+
 
 app.get('/api/sessions/current', (req, res) => {
   if (req.isAuthenticated()) {
