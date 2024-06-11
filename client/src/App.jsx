@@ -6,8 +6,9 @@ import { useState, useEffect } from 'react'
 import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { LoginForm, LogoutButton } from './components/AuthComponents';
 import NavHeader from "./components/NavHeader";
-import NotFound from './components/NotFoundComponent';
+import NotFound from './pages/NotFoundPage';
 import API from './API.mjs';
+import ErrorPage from './pages/ErrorPage';
 
 
 
@@ -47,6 +48,12 @@ function App() {
     }
   };
 
+
+  // Inline component throwing an error to test the error display
+  const ErrorComponent = () => {
+    throw new Error('Questo è un errore di test!');
+  };
+
   const router = createBrowserRouter([
     {
       element: (
@@ -60,7 +67,7 @@ function App() {
           </Container>  
         </>
       ),
-      //errorElement: ,
+      errorElement: <ErrorPage/>,//Loading errors of a valid route
       children: [
         {
           path: "/",
@@ -73,8 +80,12 @@ function App() {
         },
         {
           path: "*",
-          element: <NotFound/> 
-        }
+          element: <NotFound/> //Undefined URLs 
+        },
+        {
+          path: "/error", // Test path to generate an error
+          element: <ErrorComponent />
+        },
       ],
     },
   
