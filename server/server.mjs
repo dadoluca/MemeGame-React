@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 //import {check, validationResult} from 'express-validator';
 import {getUser, getUserById} from './user_dao.mjs';
+import {getRandomMeme} from './meme_dao.mjs';
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -57,10 +58,14 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+
 app.use(passport.authenticate('session'));
 
+//To serve meme images
+app.use(express.static('public'));
 
-/* ------------------------------------------------------- ROUTES */
+
+/*  ROUTES -------------------------------------------------------*/
 
 // Authentication routes
 app.post('/api/sessions', (req, res, next) => {
@@ -91,6 +96,11 @@ app.delete('/api/sessions/current', (req, res) => {
     if (err) return next(err);
     res.end();
   });
+});
+/* ------------------------------------------------------- ROUTES */
+
+app.get('/api/memes/random', (req, res) => {
+  getRandomMeme().then(meme => res.json(meme));
 });
 
 /*

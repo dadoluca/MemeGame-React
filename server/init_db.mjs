@@ -1,3 +1,7 @@
+/**
+ * To run: node init_db.mjs    (in server folder)
+ */
+
 import sqlite3 from 'sqlite3';
 import crypto from 'crypto';
 
@@ -61,20 +65,20 @@ const scryptAsync = (password, salt) => {
     )`);
 
     await runAsync(db, `INSERT INTO memes (image_path) VALUES
-      ('/public/images/memes/meme1.jpg'),
-      ('/public/images/memes/meme2.jpg'),
-      ('/public/images/memes/meme3.jpg'),
-      ('/public/images/memes/meme4.jpg'),
-      ('/public/images/memes/meme5.jpg'),
-      ('/public/images/memes/meme6.jpg'),
-      ('/public/images/memes/meme7.jpg'),
-      ('/public/images/memes/meme8.jpg'),
-      ('/public/images/memes/meme9.jpg'),
-      ('/public/images/memes/meme10.jpg'),
-      ('/public/images/memes/meme11.jpg'),
-      ('/public/images/memes/meme12.jpg'),
-      ('/public/images/memes/meme13.jpg'),
-      ('/public/images/memes/meme14.jpg')`);
+      ('/images/memes/meme1.jpg'),
+      ('/images/memes/meme2.jpg'),
+      ('/images/memes/meme3.jpg'),
+      ('/images/memes/meme4.jpg'),
+      ('/images/memes/meme5.jpg'),
+      ('/images/memes/meme6.jpg'),
+      ('/images/memes/meme7.jpg'),
+      ('/images/memes/meme8.jpg'),
+      ('/images/memes/meme9.jpg'),
+      ('/images/memes/meme10.jpg'),
+      ('/images/memes/meme11.jpg'),
+      ('/images/memes/meme12.jpg'),
+      ('/images/memes/meme13.jpg'),
+      ('/images/memes/meme14.jpg')`);
 
     await runAsync(db, `INSERT INTO captions (caption) VALUES
         ('Tapping someone on the left shoulder but being on the right'),
