@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { LoginForm, LogoutButton } from './components/AuthComponents';
 import NavHeader from "./components/NavHeader";
+import NotFound from './components/NotFoundComponent';
 import API from './API.mjs';
 
 
@@ -59,7 +60,7 @@ function App() {
           </Container>  
         </>
       ),
-      // errorElement: <ErrorPage />, // Sblocca questa linea se ErrorPage è definita
+      //errorElement: ,
       children: [
         {
           path: "/",
@@ -70,6 +71,10 @@ function App() {
           path: "/login",
           element: loggedIn ? <Navigate to="/" /> : <LoginForm loginFunction={handleLogin} />,
         },
+        {
+          path: "*",
+          element: <NotFound/> 
+        }
       ],
     },
   
