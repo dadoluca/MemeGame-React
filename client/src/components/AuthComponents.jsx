@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../state/AuthContext';
 
-function LoginForm({loginFunction}) {
+function LoginForm() {
+  const { handleLogin } = useContext(AuthContext);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   
@@ -11,7 +15,7 @@ function LoginForm({loginFunction}) {
       
       const credentials = { username, password };
       
-      loginFunction(credentials);
+      handleLogin(credentials);
   };
 
   return (
@@ -36,10 +40,12 @@ function LoginForm({loginFunction}) {
   )
 };
 
-function LogoutButton({logoutFunction}) {
+function LogoutButton() {
+// UPDATED
+  const { handleLogout } = useContext(AuthContext);
   return(
-    <Button variant='outline-light' onClick={logoutFunction}>Logout</Button>
-  )
+    <Button variant='outline-light' onClick={handleLogout}>Logout</Button>
+  );
 }
 
 export { LoginForm, LogoutButton };
