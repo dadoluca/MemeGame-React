@@ -1,0 +1,15 @@
+.loginPage {
+  display: flex;
+  align-items: center;    
+  justify-content: center;
+  min-height: 88vh; /*navbar max 12 vh*/
+}
+  
+.loginCard {
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 10px;
+}

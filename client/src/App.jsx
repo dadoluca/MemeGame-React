@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import { LoginForm } from './components/AuthComponents';
+import  LoginPage  from './pages/LoginPage';
 import NotFound from './pages/NotFoundPage';
 import ErrorPage from './pages/ErrorPage';
 import { useContext } from 'react';
@@ -25,7 +25,7 @@ function App() {
         },
         {
           path: "/login",
-          element: loggedIn ? <Navigate to="/" /> : <LoginForm />,
+          element: loggedIn ? <Navigate to="/" /> : <LoginPage  />,
         },
         {
           path: "*",

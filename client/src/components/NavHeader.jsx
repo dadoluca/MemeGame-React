@@ -1,6 +1,6 @@
 import { Container, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { LogoutButton } from './AuthComponents';
+import  LogoutButton  from './LogoutButton';
 import { useContext } from 'react';
 import { AuthContext } from '../state/AuthContext';
 
@@ -9,7 +9,7 @@ function NavHeader () {
   const { loggedIn } = useContext(AuthContext);
 
   return(
-    <Navbar bg='primary' data-bs-theme='dark'>
+    <Navbar bg='primary' data-bs-theme='dark' style={{maxHeight: '12vh'}} >
       <Container fluid>
         <Link to='/' className='navbar-brand'>Memes Game</Link>
         {loggedIn ? 
