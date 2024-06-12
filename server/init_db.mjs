@@ -6,7 +6,7 @@
 import sqlite3 from 'sqlite3';
 import crypto from 'crypto';
 
-const db = new sqlite3.Database('memes2.sqlite', (err) => {
+const db = new sqlite3.Database('memes.sqlite', (err) => {
   if (err) throw err;
 });
 
@@ -45,11 +45,11 @@ const scryptAsync = (password, salt) => {
 
     await runAsync(db, `CREATE TABLE IF NOT EXISTS meme_captions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      id_meme INTEGER,
-      id_caption INTEGER,
-      suitable BOOLEAN,
-      FOREIGN KEY (id_meme) REFERENCES memes(id),
-      FOREIGN KEY (id_caption) REFERENCES captions(id)
+      meme_id INTEGER,
+      caption_id INTEGER,
+      is_suitable BOOLEAN,
+      FOREIGN KEY (meme_id) REFERENCES memes(id),
+      FOREIGN KEY (caption_id) REFERENCES captions(id)
     )`);
 
     await runAsync(db, `CREATE TABLE IF NOT EXISTS users (
@@ -127,7 +127,7 @@ const scryptAsync = (password, salt) => {
   
       
 
-    await runAsync(db, `INSERT INTO meme_captions (id_meme, id_caption, suitable) VALUES
+    await runAsync(db, `INSERT INTO meme_captions (meme_id, caption_id, is_suitable) VALUES
       (1, 10, true),
       (1, 34, true),
       (1, 2, false),

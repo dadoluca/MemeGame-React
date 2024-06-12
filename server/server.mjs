@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 //import {check, validationResult} from 'express-validator';
 import {getUser, getUserById} from './user_dao.mjs';
-import {getRandomMeme} from './meme_dao.mjs';
+import {getRandomMeme, getMemeSuitableCaptions, getMemeUnsuitableCaptions } from './meme_dao.mjs';
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -100,13 +100,28 @@ app.delete('/api/sessions/current', (req, res) => {
 /* ------------------------------------------------------- ROUTES */
 
 app.get('/api/memes/random', async (req, res) => {
-  try{
-    const meme = await getRandomMeme();
-    res.json(meme);
-  }catch(err){
-    res.status(500).end();
-  }
+  try {
+      // Ge a randome meme
+      const meme = await getRandomMeme();
 
+      // Get suitable and unsuitable captions
+      const suitableCaptions = await getMemeSuitableCaptions(meme.id);
+      const unsuitableCaptions = await getMemeUnsuitableCaptions(meme.id);
+
+  
+      const completeMeme = {
+          id: meme.id,
+          imageUrl: meme.imagePath,
+          suitableCaptions: suitableCaptions,
+          unsuitableCaptions: unsuitableCaptions
+      };
+      console.log(completeMeme);
+
+      res.json(completeMeme);
+  } catch (err) {
+      console.error(`ERROR: ${err.message}`);
+      res.status(500).end();
+  }
 });
 
 /*

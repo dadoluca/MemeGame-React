@@ -1,4 +1,4 @@
-import Meme from './models/Meme.mjs';
+import Meme from './models/MemeModel.mjs';
 const SERVER_URL = 'http://localhost:3001';
 
 const logIn = async (credentials) => {
@@ -46,7 +46,7 @@ const getRandomMeme = async () => {
   const response = await fetch(`${SERVER_URL}/api/memes/random`);
   if(response.ok) {
     const meme = await response.json();
-    return new Meme(meme.id, SERVER_URL + meme.imageUrl);
+    return new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.suitableCaptions, meme.unsuitableCaptions);
   }
   else
     throw new Error('Internal server error');

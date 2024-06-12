@@ -8,13 +8,13 @@
 .card {
     text-align: center;
     width: auto;
-    max-width: 520px;
+    max-width: 620px;
     margin: auto;
 }
 
 .image {
-    max-height: 300px;
-    max-width: 500px;
+    max-height: 200px;
+    max-width: 600px;
     object-fit: contain;
     margin-bottom: 20px;
 }
