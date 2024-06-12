@@ -99,8 +99,14 @@ app.delete('/api/sessions/current', (req, res) => {
 });
 /* ------------------------------------------------------- ROUTES */
 
-app.get('/api/memes/random', (req, res) => {
-  getRandomMeme().then(meme => res.json(meme));
+app.get('/api/memes/random', async (req, res) => {
+  try{
+    const meme = await getRandomMeme();
+    res.json(meme);
+  }catch(err){
+    res.status(500).end();
+  }
+
 });
 
 /*

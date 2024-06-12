@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 88vh; /*navbar max 12 vh*/
+}
+
+.card {
+    text-align: center;
+    width: auto;
+    max-width: 520px;
+    margin: auto;
+}
+
+.image {
+    max-height: 300px;
+    max-width: 500px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}

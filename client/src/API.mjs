@@ -1,3 +1,4 @@
+import Meme from './models/Meme.mjs';
 const SERVER_URL = 'http://localhost:3001';
 
 const logIn = async (credentials) => {
@@ -9,6 +10,7 @@ const logIn = async (credentials) => {
     credentials: 'include',
     body: JSON.stringify(credentials),
   });
+  
   if(response.ok) {
     const user = await response.json();
     return user;
@@ -40,5 +42,15 @@ const logOut = async() => {
     return null;
 }
 
-const API = {logIn, logOut, getUserInfo};
+const getRandomMeme = async () => {
+  const response = await fetch(`${SERVER_URL}/api/memes/random`);
+  if(response.ok) {
+    const meme = await response.json();
+    return new Meme(meme.id, SERVER_URL + meme.imageUrl);
+  }
+  else
+    throw new Error('Internal server error');
+}
+
+const API = {logIn, logOut, getUserInfo, getRandomMeme};
 export default API;

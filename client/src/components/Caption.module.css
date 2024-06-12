@@ -1,0 +1,18 @@
+.captions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.caption {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.caption:hover {
+    background-color: #e2e6ea;
+}
