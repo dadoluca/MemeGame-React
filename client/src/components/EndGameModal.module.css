@@ -1,0 +1,28 @@
+.modalBody {
+    text-align: center;
+    font-size: 1.5em;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.modalBody h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.modalBody p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    font-size: 1.2em;
+    padding: 10px 20px;
+}
+  

@@ -9,8 +9,8 @@ import { useContext } from 'react';
 import { AuthContext } from './state/AuthContext';
 import RootLayout from './pages/RootLayout';
 import ErrorComponent from './components/ErrorTestComponent';
-import FullGamePage from './pages/FullGamePage';
-import SingleRoundGamePage from './pages/SingleRoundGamePage';
+import GamePage from './pages/GamePage';
+import HomePage from './pages/HomePage';
 
 function App() {
   const { loggedIn } = useContext(AuthContext);
@@ -22,7 +22,11 @@ function App() {
       children: [
         {
           path: "/",
-          element: loggedIn ? <FullGamePage /> : <SingleRoundGamePage />
+          element: <HomePage />
+        },
+        {
+          path: "/game",
+          element: <GamePage />
         },
         {
           path: "/login",

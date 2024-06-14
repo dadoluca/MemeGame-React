@@ -1,0 +1,42 @@
+.container {
+    margin-top: 50px;
+    text-align: center;
+  }
+  
+  .card {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .description {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+  }
+  
+  .playButton {
+    margin-top: 20px;
+    width: 100%;
+    font-size: 1.5em;
+    background-color: #007bff;
+    border: none;
+    padding: 15px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .playButton:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  .playButton:active {
+    background-color: #004494;
+    transform: scale(0.95);
+  }
+  
