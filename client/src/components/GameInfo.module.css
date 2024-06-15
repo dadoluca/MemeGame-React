@@ -1,0 +1,7 @@
+.gameInfo {
+    position: fixed;
+    left: 10px;
+    width: 200px;
+    z-index: 1000;
+}
+  

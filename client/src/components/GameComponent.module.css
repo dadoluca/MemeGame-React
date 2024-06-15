@@ -1,20 +1,22 @@
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 88vh; /*navbar max 12 vh*/
 }
 
 .card {
-    text-align: center;
+    text-align: center; 
     width: auto;
-    max-width: 620px;
+    min-width: 50vw;
+    max-width: 1020px;
     margin: auto;
 }
 
 .image {
     max-height: 200px;
-    max-width: 600px;
+    max-width: 700px;
     object-fit: contain;
     margin-bottom: 20px;
-}
+    border-radius: 10px; /* borders */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* shadow */
+  }
