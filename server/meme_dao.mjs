@@ -5,16 +5,15 @@ import { Caption } from './models/CaptionModel.mjs';
 
 import { db } from './db.mjs';
 
-// Function that retrieves the ID and URL of a meme image
-export const getRandomMeme = () => {
+// Function that retrieves the ID and URL of a meme image (or more than one)
+export const getRandomMemes = (count) => {
     return new Promise((resolve, reject) => {
-        db.get('SELECT id, image_path FROM memes ORDER BY RANDOM() LIMIT 1', (err, row) => {
+        db.all('SELECT id, image_path FROM memes ORDER BY RANDOM() LIMIT ?', [count], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
-                const id = row.id;
-                const imagePath = row.image_path;
-                resolve(new Meme(id, imagePath));
+                const memes = rows.map(row => new Meme(row.id, row.image_path));
+                resolve(memes);
             }
         });
     });
@@ -52,5 +51,47 @@ export const getMemeUnsuitableCaptions = (memeId) => {
             }
         });
     });
+}
+
+// Function that checks if a given caption is suitable for a given meme
+export const isCaptionSuitableForMeme = (memeId, captionId) => {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT is_suitable FROM meme_captions WHERE meme_id = ? AND caption_id = ?', [memeId, captionId], (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                resolve(row.is_suitable === 1);
+            } else {
+                resolve(false); // No match found
+            }
+        });
+    });
+}
+
+
+// Function to shuffle an array
+const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Function that retrieves complete memes with mixed captions
+export const getCompleteMemes = async (count) => {
+    const memes = await getRandomMemes(count);
+    //Promise all to retrieve all captions for each meme IN PARALLEL
+    const completeMemes = await Promise.all(memes.map(async (meme) => {
+        const suitableCaptions = await getMemeSuitableCaptions(meme.id);
+        const unsuitableCaptions = await getMemeUnsuitableCaptions(meme.id);
+        const allCaptions = shuffleArray([...suitableCaptions, ...unsuitableCaptions]);
+        return {
+            id: meme.id,
+            imageUrl: meme.imagePath,
+            captions: allCaptions
+        };
+    }));
+    return completeMemes;
 }
 

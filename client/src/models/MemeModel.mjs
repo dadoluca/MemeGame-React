@@ -1,8 +1,7 @@
-function Meme(id, imagePath, suitableCaptions, unsuitableCaptions) {
+function Meme(id, imagePath, captions) {
     this.id = id;
     this.imageUrl = imagePath;
-    this.suitableCaptions = suitableCaptions;
-    this.unsuitableCaptions = unsuitableCaptions;
+    this.captions = captions;
 }
   
 export default Meme;

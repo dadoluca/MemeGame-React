@@ -42,15 +42,47 @@ const logOut = async() => {
     return null;
 }
 
-const getRandomMeme = async () => {
+const getRandomMemes = async () => {
   const response = await fetch(`${SERVER_URL}/api/memes/random`);
   if(response.ok) {
-    const meme = await response.json();
-    return new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.suitableCaptions, meme.unsuitableCaptions);
+    const memes = await response.json();
+    return memes.map(meme => new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.captions));
   }
   else
     throw new Error('Internal server error');
 }
+/*
+const getRandomMeme = async () => {
+  const response = await fetch(`${SERVER_URL}/api/memes/random`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'}, 
+    credentials: 'include'
+  });
+  if (response.ok) {
+    const meme = await response.json();
+    return new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.suitableCaptions, meme.unsuitableCaptions);
+  } else {
+    throw new Error('Internal server error');
+  }
+};*/
 
-const API = {logIn, logOut, getUserInfo, getRandomMeme};
+
+const verifyCaptionCorrectness = async (memeId, captionId) => {
+  const response = await fetch(`${SERVER_URL}/api/memes/is-correct`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ memeId, captionId })
+  });
+  if (response.ok) {
+      const result = await response.json();
+      return result.isSuitable;
+  } else {
+      throw new Error('Internal server error');
+  }
+};
+
+
+const API = {logIn, logOut, getUserInfo, getRandomMemes, verifyCaptionCorrectness};
 export default API;

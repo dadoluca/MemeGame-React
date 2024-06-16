@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 //import {check, validationResult} from 'express-validator';
 import {getUser, getUserById} from './user_dao.mjs';
-import {getRandomMeme, getMemeSuitableCaptions, getMemeUnsuitableCaptions } from './meme_dao.mjs';
+import {getCompleteMemes, isCaptionSuitableForMeme} from './meme_dao.mjs';
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -101,45 +101,36 @@ app.delete('/api/sessions/current', (req, res) => {
 
 app.get('/api/memes/random', async (req, res) => {
   try {
-      // Ge a randome meme
-      const meme = await getRandomMeme();
+      const memeCount = req.isAuthenticated() ? 3 : 1;
 
-      // Get suitable and unsuitable captions
-      const suitableCaptions = await getMemeSuitableCaptions(meme.id);
-      const unsuitableCaptions = await getMemeUnsuitableCaptions(meme.id);
+      const completeMemes = await getCompleteMemes(memeCount);
 
-  
-      const completeMeme = {
-          id: meme.id,
-          imageUrl: meme.imagePath,
-          suitableCaptions: suitableCaptions,
-          unsuitableCaptions: unsuitableCaptions
-      };
-      console.log(completeMeme);
-
-      res.json(completeMeme);
+      res.json(completeMemes);
   } catch (err) {
       console.error(`ERROR: ${err.message}`);
       res.status(500).end();
   }
 });
 
-/*
-app.get('/api/memes/random', (req, res) => {
-  db.get(`SELECT * FROM memes ORDER BY RANDOM() LIMIT 1`, (err, meme) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
+
+app.post('/api/memes/is-correct', async (req, res) => {
+    const { memeId, captionId } = req.body;
+    
+    if (!memeId || !captionId) {
+        return res.status(400).json({ error: 'Meme ID and Caption ID are required' });
     }
-    db.all(`SELECT * FROM captions ORDER BY RANDOM() LIMIT 7`, (err, captions) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      res.json({ meme, captions });
-    });
-  });
+
+    try {
+        const isSuitable = await isCaptionSuitableForMeme(memeId, captionId);
+        res.json({ isSuitable });
+    } catch (err) {
+        console.error(`ERROR: ${err.message}`);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
+
+
+/*
 
 app.post('/api/scores', (req, res) => {
   const { user_id, score } = req.body;

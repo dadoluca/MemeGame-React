@@ -15,31 +15,29 @@ const Timer = ({duration, onTimeUp, round, gameOver}) => {
       handleTimeUp();
       return;
     }
-    const timerId = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
-    }, 1000);
+    else if(!gameOver){
+      const timerId = setInterval(() => {
+        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      }, 1000);
 
-    return () => clearInterval(timerId);
-  }, [timeLeft]);
+      return () => clearInterval(timerId);
+    }
+  }, [timeLeft,gameOver]);
 
   //when round changes
   useEffect(() => {
     setTimeLeft(duration);
   }, [round]);
 
-  //when game is over
-  useEffect(() => {
-    if (gameOver) {
-      setTimeLeft(0);
-    }
-  }, [gameOver]);
 
-  return (
-    <div className={styles.timer}>
-      <FaClock size={24} />
-      <span>{timeLeft}s</span>
-    </div>
-  );
+  const timerSize = 60 -timeLeft/2;
+  const timerColor = timeLeft <= 5 ? 'red' : timeLeft <= 15 ? 'orange' : '#007bff';
+    return (
+      <div className={styles.timer}>
+        <FaClock size={timerSize} className={styles.icon} style={{color: timerColor}} /> 
+        <span className={styles.timeLeft} style={{color: timerColor, fontSize: (timerSize-8)+'px'}}>{timeLeft}s</span>
+      </div>
+    );
 };
 
 export default Timer;
