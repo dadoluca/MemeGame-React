@@ -5,6 +5,8 @@
 }
 
 .caption {
+    width: 100%;
+    margin-bottom: 3px;
     padding: 10px;
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
@@ -14,5 +16,6 @@
 }
 
 .caption:hover {
-    background-color: #e2e6ea;
+    background-color: #cccecfb7;
 }
+

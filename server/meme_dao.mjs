@@ -68,6 +68,19 @@ export const isCaptionSuitableForMeme = (memeId, captionId) => {
     });
 }
 
+export const getSuitableCaptionsForMeme = (memeId, allCaptionIds) => {
+    return new Promise((resolve, reject) => {
+        db.all('SELECT caption_id FROM meme_captions WHERE meme_id = ? AND is_suitable = 1 AND caption_id IN (' + allCaptionIds.map(() => '?').join(',') + ')', [memeId, ...allCaptionIds], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                const suitableCaptions = rows.map(row => row.caption_id);
+                resolve(suitableCaptions);
+            }
+        });
+    });
+}
+
 
 // Function to shuffle an array
 const shuffleArray = (array) => {

@@ -1,8 +1,8 @@
 import { Container, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import  LogoutButton  from './LogoutButton';
+import  LogoutButton  from '../common/LogoutButton';
 import { useContext } from 'react';
-import { AuthContext } from '../state/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 // UPDATED
 function NavHeader () {

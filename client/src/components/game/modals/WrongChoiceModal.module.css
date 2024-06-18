@@ -1,0 +1,10 @@
+.captionList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .captionItem {
+    margin: 10px 0;
+    font-weight: bold;
+  }
+  

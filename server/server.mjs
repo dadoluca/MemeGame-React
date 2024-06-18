@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 //import {check, validationResult} from 'express-validator';
 import {getUser, getUserById} from './user_dao.mjs';
-import {getCompleteMemes, isCaptionSuitableForMeme} from './meme_dao.mjs';
+import {getCompleteMemes, isCaptionSuitableForMeme, getSuitableCaptionsForMeme} from './meme_dao.mjs';
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -113,22 +113,30 @@ app.get('/api/memes/random', async (req, res) => {
 });
 
 
+/** IS CAPTION CORRECT 
+ * receives the id of the chosen caption and the meme to which it refers
+ * and the ids of all the caption provided by the server for that meme.
+ * If the chosen caption is correct it returns true, 
+ * otherwise it returns false and the ids of the correct caption(s)
+ */
 app.post('/api/memes/is-correct', async (req, res) => {
-    const { memeId, captionId } = req.body;
-    
-    if (!memeId || !captionId) {
-        return res.status(400).json({ error: 'Meme ID and Caption ID are required' });
-    }
+  const { memeId, captionId, allCaptionIds } = req.body;
+  
+  if (!memeId || !captionId || !allCaptionIds) {
+      return res.status(400).json({ error: 'Meme ID, Caption ID and all Caption IDs are required' });
+  }
 
-    try {
-        const isSuitable = await isCaptionSuitableForMeme(memeId, captionId);
-        res.json({ isSuitable });
-    } catch (err) {
-        console.error(`ERROR: ${err.message}`);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+  try {
+      const isSuitable = await isCaptionSuitableForMeme(memeId, captionId);
+      let suitableCaptions = isSuitable ? [] :  await getSuitableCaptionsForMeme(memeId, allCaptionIds);
+      console.log(`isSuitable: ${isSuitable}, suitableCaptions: ${JSON.stringify(suitableCaptions)}`);
+      res.json({ isSuitable: isSuitable, suitableCaptions: suitableCaptions });
+
+  } catch (err) {
+      console.error(`ERROR: ${err.message}`);
+      res.status(500).json({ error: 'Internal server error' });
+  }
 });
-
 
 /*
 

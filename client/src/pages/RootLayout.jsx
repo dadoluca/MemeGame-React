@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { useContext } from 'react';
-import { AuthContext } from '../state/AuthContext';
-import NavHeader from "../components/NavHeader";
+import { AuthContext } from '../contexts/AuthContext';
+import NavHeader from "../components/layout/NavHeader";
 import { Container, Row, Alert } from 'react-bootstrap';
 
 function RootLayout(){

@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useNavigate} from 'react-router-dom';
 import styles from './EndGameModal.module.css';
-import { AuthContext } from '../state/AuthContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 import {useContext } from 'react';
 const EndGameModal = ({ show, score, onClose, onRematch }) => {
   const { loggedIn } = useContext(AuthContext);

@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap';   
 import { useContext } from 'react';
-import { AuthContext } from '../state/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 function LogoutButton() {
       const { handleLogout } = useContext(AuthContext);
       return(

@@ -1,4 +1,4 @@
-import Meme from './models/MemeModel.mjs';
+import Meme from '../models/MemeModel.mjs';
 const SERVER_URL = 'http://localhost:3001';
 
 const logIn = async (credentials) => {
@@ -67,17 +67,18 @@ const getRandomMeme = async () => {
 };*/
 
 
-const verifyCaptionCorrectness = async (memeId, captionId) => {
+const verifyCaptionCorrectness = async (memeId, captionId, allCaptionIds) => {
   const response = await fetch(`${SERVER_URL}/api/memes/is-correct`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ memeId, captionId })
+      
+      body: JSON.stringify({ memeId, captionId, allCaptionIds })
   });
   if (response.ok) {
       const result = await response.json();
-      return result.isSuitable;
+      return { isSuitable: result.isSuitable, suitableCaptions: result.suitableCaptions };
   } else {
       throw new Error('Internal server error');
   }

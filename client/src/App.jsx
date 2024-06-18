@@ -2,15 +2,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import  LoginPage  from './pages/LoginPage';
-import NotFound from './pages/NotFoundPage';
-import ErrorPage from './pages/ErrorPage';
+import  LoginPage  from './pages/loginPage/LoginPage';
+import NotFound from './pages/errorPages//NotFoundPage';
+import ErrorPage from './pages/errorPages/ErrorPage';
 import { useContext } from 'react';
-import { AuthContext } from './state/AuthContext';
+import { AuthContext } from './contexts/AuthContext';
 import RootLayout from './pages/RootLayout';
-import ErrorComponent from './components/ErrorTestComponent';
-import GamePage from './pages/GamePage';
-import HomePage from './pages/HomePage';
+import ErrorComponent from './components/common/ErrorTestComponent';
+import GamePage from './pages/gamePage/GamePage';
+import HomePage from './pages/homePage/HomePage';
 
 function App() {
   const { loggedIn } = useContext(AuthContext);

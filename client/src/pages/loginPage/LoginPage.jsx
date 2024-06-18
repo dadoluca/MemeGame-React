@@ -1,7 +1,7 @@
 import React from 'react';
 import {  Card } from 'react-bootstrap';
 import styles from './LoginPage.module.css';
-import  LoginForm  from '../components/LoginForm';
+import  LoginForm  from '../../components/common/LoginForm';
 
 function LoginPage() {
   return (

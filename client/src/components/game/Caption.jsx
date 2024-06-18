@@ -8,9 +8,9 @@ const Caption = ({ caption, onClick }) => {
     onClick(caption);
   };
   return (
-    <div className={styles.caption} onClick={handleClick}>
+    <button className={styles.caption} onClick={handleClick}>
       {caption.caption}
-    </div>
+    </button>
   );
 };
 
