@@ -14,16 +14,16 @@ const GameState = {
     SHOW_WRONG_CHOICE: 'show_wrong_choice',
     SHOW_TIME_OUT: 'show_time_out',
     GAME_OVER: 'game_over',
-    END: 'end'
 };
 
 function GamePage() {
     const { loggedIn } = useContext(AuthContext);
     const [score, setScore] = useState(0);
     const [round, setRound] = useState(0);
-    const [memes, setMemes] = useState([]);
+    const [memes, setMemes] = useState([]);//1 to 3 memes based on user login
     const [gameState, setGameState] = useState(GameState.LOADING);
-    const [correctCaptionsIds, setCorrectCaptionsIds] = useState([]);
+    const [correctCaptionsIds, setCorrectCaptionsIds] = useState([]);//to show in wrong choice modal
+    const [matchedMemes, setMatchedMemes] = useState([]);//to show in end game modal
 
     const totalRounds = loggedIn ? 3 : 1;
     console.log('totalRounds', totalRounds);
@@ -49,6 +49,7 @@ function GamePage() {
         if (response.isSuitable) {
             setScore(prevScore => prevScore + 5);
             setCorrectCaptionsIds([]);
+            setMatchedMemes(prevMatchedMemes => [...prevMatchedMemes, { meme, caption }]); // Aggiungi il meme corretto al riepilogo
             increaseRound();
         } else {
             setCorrectCaptionsIds(response.suitableCaptions);
@@ -76,12 +77,13 @@ function GamePage() {
     };
 
     const handleCloseEndModal = () => {
-        setGameState(GameState.END);
+        console.log('game over');
     };
 
     const handleRematch = () => {
         setScore(0);
         setRound(0);
+        setMatchedMemes([]); // Resetta il riepilogo dei meme corretti
         getMemes();
     };
     console.log(gameState, round, totalRounds,memes);
@@ -90,33 +92,30 @@ function GamePage() {
             {gameState === GameState.LOADING ? (
                 <p>Loading...</p>
             ) : (
-                <>
-                    {memes[round] && (
-                        
-                  
-                        <div className={styles.gameContent}>
-                            <h1 style={{ marginBottom: "20px" }}>What do you meme?</h1>
-                            <GameInfo round={round} totalRounds={totalRounds} score={score} />
-                            <Timer duration={30} onTimeUp={handleTimeUp} round={round} gameOver={gameState === GameState.GAME_OVER} />
-                            <GameComponent
-                                imageUrl={memes[round].imageUrl}
-                                captions={memes[round].captions}
-                                onCaptionClick={handleCaptionClick}
-                            />
-                        </div>
-                    )}
+                <>                  
+                    <div className={styles.gameContent}>
+                        <h1 style={{ marginBottom: "20px" }}>What do you meme?</h1>
+                        <GameInfo round={round} totalRounds={totalRounds} score={score} />
+                        <Timer duration={30} onTimeUp={handleTimeUp} round={round} gameOver={gameState === GameState.GAME_OVER} />
+                        <GameComponent
+                            imageUrl={memes[round].imageUrl}
+                            captions={memes[round].captions}
+                            onCaptionClick={handleCaptionClick}
+                        />
+                    </div>
+
                     <WrongChoiceModal
                         show={gameState === GameState.SHOW_WRONG_CHOICE || gameState === GameState.SHOW_TIME_OUT}
                         onClose={handleCloseWrongChoiceModal}
                         correctCaptions={memes[round]?.captions.filter(c => correctCaptionsIds.includes(c.id))}
                     />
-                    <EndGameModal show={gameState === GameState.GAME_OVER} score={score} onClose={handleCloseEndModal} onRematch={handleRematch} />
-                    {gameState === GameState.END && (
-                        <div className={styles.endMessage}>
-                            <h2>Thank you for playing!</h2>
-                            <button onClick={handleRematch}>Play Again</button>
-                        </div>
-                    )}
+                    <EndGameModal 
+                        show={gameState === GameState.GAME_OVER} 
+                        score={score} 
+                        onClose={handleCloseEndModal} 
+                        onRematch={handleRematch}
+                        matchedMemes={matchedMemes} 
+                    />
                 </>
             )}
         </div>

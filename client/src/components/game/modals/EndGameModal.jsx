@@ -1,10 +1,11 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './EndGameModal.module.css';
 import { AuthContext } from '../../../contexts/AuthContext';
-import {useContext } from 'react';
-const EndGameModal = ({ show, score, onClose, onRematch }) => {
+import { useContext } from 'react';
+
+const EndGameModal = ({ show, score, onClose, onRematch, matchedMemes }) => {
   const { loggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -17,24 +18,48 @@ const EndGameModal = ({ show, score, onClose, onRematch }) => {
     onRematch();
   };
 
+  const getModalWidthClass = (count) => {
+    if (count === 2) return styles.modalWidthTwo;
+    if (count === 3) return styles.modalWidthThree;
+    return styles.modalWidthOne;
+  };
+
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={handleClose} centered dialogClassName={`${styles.customModalWidth} ${getModalWidthClass(matchedMemes.length)}`}>
       <Modal.Header closeButton>
         <Modal.Title>Game Over</Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles.modalBody}>
-        <h2>Your Score: {score}</h2>
-        <p>Thank you for playing!</p>
-        { !loggedIn && <p>Please log in for the full version of the game</p>}
+        {loggedIn ? (
+          <>
+            <h2>Your Score: {score} / 15</h2>
+            { matchedMemes.length > 0 ? <h3>Summary of Correct Matches:</h3> : <h3>You suck, play something else.</h3>}
+            <div className={styles.matchedMemesGrid}>
+              {matchedMemes.map((match, index) => (
+                <div key={index} className={styles.matchedMemeItem}>
+                  <img src={match.meme.imageUrl} alt="Meme" className={styles.summaryImage} />
+                  <div className={styles.smallCaption}>{match.caption.caption}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )
+        : (   
+          <>   
+            <h3>Thank you for playing!</h3>
+            <p>Please log in for the full version of the game</p>
+          </>   
+        )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="primary" onClick={handleClose}>
+      <Modal.Footer className={styles.modalFooter}>
+        <Button variant="primary" onClick={handleClose} className={styles.button}>
           Back to Home
         </Button>
-        { loggedIn &&
-        <Button variant="success" onClick={handleRematch}>
-          Play Again
-        </Button>}
+        {loggedIn && (
+          <Button variant="success" onClick={handleRematch} className={styles.button}>
+            Play Again
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   );
