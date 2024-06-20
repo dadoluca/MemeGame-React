@@ -11,7 +11,7 @@ const WrongChoiceModal = ({ show, onClose, correctCaptions }) => {
       <Modal.Body>
         <p>You didn't choose the best caption. Here are the correct ones:</p>
         <ul className={styles.captionList}>
-          {correctCaptions.map((caption, index) => (
+          {correctCaptions?.map((caption, index) => (
             <li key={index} className={styles.captionItem}>{caption.caption}</li>
           ))}
         </ul>

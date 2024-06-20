@@ -102,7 +102,6 @@ app.delete('/api/sessions/current', (req, res) => {
 app.get('/api/memes/random', async (req, res) => {
   try {
       const memeCount = req.isAuthenticated() ? 3 : 1;
-
       const completeMemes = await getCompleteMemes(memeCount);
 
       res.json(completeMemes);

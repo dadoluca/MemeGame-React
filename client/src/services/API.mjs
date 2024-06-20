@@ -43,7 +43,9 @@ const logOut = async() => {
 }
 
 const getRandomMemes = async () => {
-  const response = await fetch(`${SERVER_URL}/api/memes/random`);
+  const response = await fetch(`${SERVER_URL}/api/memes/random`,{
+    credentials: 'include'
+  });
   if(response.ok) {
     const memes = await response.json();
     return memes.map(meme => new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.captions));
