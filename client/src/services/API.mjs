@@ -1,4 +1,5 @@
 import Meme from '../models/MemeModel.mjs';
+
 const SERVER_URL = 'http://localhost:3001';
 
 const logIn = async (credentials) => {
@@ -51,7 +52,7 @@ const getRandomMemes = async () => {
     return memes.map(meme => new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.captions));
   }
   else
-    throw new Error('Internal server error');
+  throw new Error('Internal server error');
 }
 /*
 const getRandomMeme = async () => {

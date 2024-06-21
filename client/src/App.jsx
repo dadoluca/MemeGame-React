@@ -3,13 +3,13 @@ import './App.css';
 
 import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import  LoginPage  from './pages/loginPage/LoginPage';
-import NotFound from './pages/errorPages//NotFoundPage';
+import WrongUrlPage from './pages/errorPages/WrongUrlPage';
 import ErrorPage from './pages/errorPages/ErrorPage';
 import { useContext } from 'react';
 import { AuthContext } from './contexts/AuthContext';
 import RootLayout from './pages/RootLayout';
 import ErrorComponent from './components/common/ErrorTestComponent';
-import GamePage from './pages/gamePage/GamePage';
+import GamePage, { loader as memesLoader } from './pages/gamePage/GamePage';
 import HomePage from './pages/homePage/HomePage';
 
 function App() {
@@ -26,7 +26,8 @@ function App() {
         },
         {
           path: "/game",
-          element: <GamePage />
+          element: <GamePage />,
+          loader: memesLoader,
         },
         {
           path: "/login",
@@ -34,7 +35,7 @@ function App() {
         },
         {
           path: "*",
-          element: <NotFound/> //Undefined URLs 
+          element: <WrongUrlPage/> //Undefined URLs 
         },
         {
           path: "/error", // Test path to generate an error for testing errors display

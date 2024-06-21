@@ -10,7 +10,7 @@ function ErrorPage() {
   let message = 'Something went wrong!';
 
   if (error.status === 500) {
-    message = error.data.message;
+    message = 'Our fault. We are working on fixing it!';
   }
 
   if (error.status === 404) {

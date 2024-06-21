@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image, Card, Container, Row, Col } from 'react-bootstrap';
-import styles from './GameComponent.module.css';
+import styles from './MemeCard.module.css';
 import Caption from './Caption';
 
-const GameComponent = ({ imageUrl, captions, onCaptionClick }) => {
+const MemeCard = ({ imageUrl, captions, onCaptionClick }) => {
     return (
         <Container className={styles.container}>
             <Row className="justify-content-md-center">
@@ -35,4 +35,4 @@ const GameComponent = ({ imageUrl, captions, onCaptionClick }) => {
     );
 };
 
-export default GameComponent;
+export default MemeCard;

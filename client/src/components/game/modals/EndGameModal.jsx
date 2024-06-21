@@ -1,17 +1,14 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import styles from './EndGameModal.module.css';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useContext } from 'react';
 
 const EndGameModal = ({ show, score, onClose, onRematch, matchedMemes }) => {
   const { loggedIn } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const handleClose = () => {
     onClose();
-    navigate('/');
   };
 
   const handleRematch = () => {
