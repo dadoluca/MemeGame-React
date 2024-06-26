@@ -11,6 +11,7 @@ import RootLayout from './pages/RootLayout';
 import ErrorComponent from './components/common/ErrorTestComponent';
 import GamePage, { loader as memesLoader } from './pages/gamePage/GamePage';
 import HomePage from './pages/homePage/HomePage';
+import UserProfilePage, { loader as gamesHistoryLoader } from './pages/userProfilePage/UserProfilePage';
 
 function App() {
   const { loggedIn } = useContext(AuthContext);
@@ -32,6 +33,11 @@ function App() {
         {
           path: "/login",
           element: loggedIn ? <Navigate to="/" /> : <LoginPage  />,
+        },
+        {
+          path: "/profile",
+          element: loggedIn ? <UserProfilePage /> : <Navigate to="/login" />,
+          loader: gamesHistoryLoader,
         },
         {
           path: "*",

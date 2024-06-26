@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import MemeCard from './MemeCard';
 import GameInfo from '../../components/game/GameInfo';
@@ -28,7 +28,7 @@ const GameManager = ({ memes }) => {
     const [correctCaptionsIds, setCorrectCaptionsIds] = useState([]);
     const [matchedMemes, setMatchedMemes] = useState([]);
     const [showErrorSavingPopup, setShowErrorSavingPopup] = useState(false);
-
+    
     const totalRounds = loggedIn ? 3 : 1;
 
     const handleCaptionClick = async (caption) => {
@@ -36,8 +36,10 @@ const GameManager = ({ memes }) => {
         const currentMemeCaptionsIds = meme.captions.map(c => c.id);
         const response = await API.verifyCaptionCorrectness(meme.id, caption.id, currentMemeCaptionsIds);
 
-        setMatchedMemes(prevMatchedMemes =>
-             [...prevMatchedMemes, { roundNumber:round, meme, caption, score: response.isSuitable ? 5 : 0 }]);
+        
+        setMatchedMemes(prevMatchedMemes => 
+            [...prevMatchedMemes, { roundNumber: round, meme, caption, score: response.isSuitable ? 5 : 0 }]);
+
         if (response.isSuitable) {
             setScore(prevScore => prevScore + 5);
             setCorrectCaptionsIds([]);
@@ -48,14 +50,41 @@ const GameManager = ({ memes }) => {
         }
     };
 
-    const increaseRound = async () => {
+    /*const increaseRound = async() => {
         if (round + 1 < totalRounds) {
             setRound(prevRound => prevRound + 1);
             setGameState(GameState.PLAYING);
         } else {
             setGameState(GameState.GAME_OVER);
-
             if (loggedIn) {
+                try {
+                    const rounds = matchedMemes.map((round, index) => ({
+                        roundNumber: round.roundNumber,
+                        memeId: round.meme.id,  
+                        score: round.score
+                    }));
+                    console.log(rounds);
+                    await API.saveGame(score, rounds);
+                } catch (error) {
+                    console.error("Error saving the game:", error);
+                    setShowErrorSavingPopup(true);
+                } 
+            }
+        }
+    };*/
+
+    const increaseRound = () => {
+        if (round + 1 < totalRounds) {
+            setRound(prevRound => prevRound + 1);
+            setGameState(GameState.PLAYING);
+        } else {
+            setGameState(GameState.GAME_OVER);
+        }
+    };
+
+    useEffect(() => {
+        const saveGame = async () => {
+            if (gameState===GameState.GAME_OVER && matchedMemes.length == 3) {
                 try {
                     const rounds = matchedMemes.map((round, index) => ({
                         roundNumber: round.roundNumber,
@@ -66,10 +95,12 @@ const GameManager = ({ memes }) => {
                 } catch (error) {
                     console.error("Error saving the game:", error);
                     setShowErrorSavingPopup(true);
-                } 
+                }
             }
-        }
-    };
+        };
+
+        saveGame();
+    }, [gameState, matchedMemes]);
 
     const handleTimeUp = () => {
         setCorrectCaptionsIds(memes[round].captions.map(c => c.id));

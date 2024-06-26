@@ -5,7 +5,6 @@ import { AuthContext } from '../../../contexts/AuthContext';
 import { useContext } from 'react';
 
 const EndGameModal = ({ show, score, onClose, onRematch, correctMatchesMemes }) => {
-  console.log(correctMatchesMemes);
   const { loggedIn } = useContext(AuthContext);
 
   const handleClose = () => {

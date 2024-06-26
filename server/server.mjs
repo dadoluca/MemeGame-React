@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import {check, validationResult} from 'express-validator';
 import {getUser, getUserById} from './user_dao.mjs';
-import {getCompleteMemes, isCaptionSuitableForMeme, getSuitableCaptionsForMeme, saveGame} from './meme_dao.mjs';
+import {getCompleteMemes, isCaptionSuitableForMeme, getSuitableCaptionsForMeme, saveGame, getUserGameHistory } from './meme_dao.mjs';
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -146,7 +146,7 @@ app.post('/api/memes/is-correct', async (req, res) => {
 
 app.post('/api/games', isLoggedIn, [
   check('totalScore').isInt({ min: 0, max: 15 }),
-  //check('rounds').isArray().notEmpty(),
+  //check('rounds').isArray().notEmpty().isLength({ min: 3, max: 3 }),
   check('rounds.*.roundNumber').isInt({ min: 0 }),
   check('rounds.*.memeId').isInt({ min: 1 }),
   check('rounds.*.score').isInt({ min: 0, max: 5 })
@@ -157,7 +157,6 @@ app.post('/api/games', isLoggedIn, [
   }
   const userId = req.user.id;  
   const { totalScore, rounds } = req.body;
-
   try {
     const createdRecords = await saveGame(userId, totalScore, rounds);
     if(createdRecords === 4) //4 beacuse 3 rounds + 1 game
@@ -168,6 +167,19 @@ app.post('/api/games', isLoggedIn, [
     res.status(500).json({ error: e.message });
   }
 });
+
+
+app.get('/api/user/games-history', isLoggedIn, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+      const games = await getUserGameHistory(userId);
+      res.json(games);
+  } catch (e) {
+      res.status(500).json({ error: e.message });
+  }
+});
+
 
 
 // Start server

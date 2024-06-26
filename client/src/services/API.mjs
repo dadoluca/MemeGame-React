@@ -1,4 +1,5 @@
 import Meme from '../models/MemeModel.mjs';
+import { Game } from '../models/PastGameModel.mjs';
 
 const SERVER_URL = 'http://localhost:3001';
 
@@ -103,5 +104,17 @@ const saveGame = async (totalScore, rounds) => {
   }
 };
 
-const API = {logIn, logOut, getUserInfo, getRandomMemes, verifyCaptionCorrectness, saveGame};
+const getUserGameHistory = async () => {
+  const response = await fetch(`${SERVER_URL}/api/user/games-history`, {
+    credentials: 'include',
+  });
+  if (response.ok) {
+    const games = await response.json();
+    return games.map(game => new Game(game.date, game.totalScore, game.rounds, SERVER_URL));
+  } else {
+    throw new Error('Internal server error');
+  }
+};
+
+const API = {logIn, logOut, getUserInfo, getRandomMemes, verifyCaptionCorrectness, saveGame, getUserGameHistory};
 export default API;

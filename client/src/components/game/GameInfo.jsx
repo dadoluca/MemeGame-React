@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './GameInfo.module.css';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 const GameInfo = ({ round, totalRounds, score }) => {
     const {loggedIn, user } = useContext(AuthContext);

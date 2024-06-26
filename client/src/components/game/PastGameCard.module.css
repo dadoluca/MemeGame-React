@@ -1,0 +1,54 @@
+.card {
+    max-width: 70vw; 
+    min-width: 600px;
+    margin: auto; /* Center the card */
+    border-color: rgb(177, 177, 177);
+}
+.cardHeader{
+    background-color: rgb(255, 255, 255);
+}
+.cardHeader h5 {
+    font-size: 1.25rem; 
+    font-weight: bold; 
+}
+
+.cardHeader h6 {
+    color: darkgray;
+    font-style: italic; 
+}
+
+.image {
+    max-width: 100%;
+    height: auto;
+    max-height: 120px; 
+    margin-bottom: 5px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+}
+
+.greenBorder {
+    border: 3px solid rgb(0, 189, 0);
+}
+
+.greenScore {
+    color: green;
+}
+
+.redBorder {
+    border: 3px solid red;
+}
+
+.redScore {
+    color: red;
+}
+
+.roundInfo {
+    margin-bottom: 10px; 
+}
+
+.score {
+    display: block;
+    margin-top: 5px;
+    font-weight: bold;
+}
+  
