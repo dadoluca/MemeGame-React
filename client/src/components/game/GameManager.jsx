@@ -62,7 +62,19 @@ const GameManager = ({ memes }) => {
         increaseRound();
     };
 
-    const handleCloseEndModal = () => {
+    const handleCloseEndModal = async () => {
+        if (loggedIn) {
+            try {
+                const rounds = matchedMemes.map((meme, index) => ({
+                    roundNumber: index + 1,//MOMENTANEO      TODO SALVARE IL ROUND  e creare struttura apposita
+                    memeId: meme.meme.id,
+                    score: 5
+                }));
+                await API.saveGame(score, rounds);
+            } catch (error) {
+                console.error("Error saving the game:", error);
+            }
+        }
         navigate('/');//redirect to home
     };
 

@@ -108,3 +108,29 @@ export const getCompleteMemes = async (count) => {
     return completeMemes;
 }
 
+
+export const saveGame = (userId, totalScore, rounds) => {
+    return new Promise((resolve, reject) => {
+        db.run('INSERT INTO games (user_id, total_score) VALUES (?, ?)',
+        [userId, totalScore], function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                const gameId = this.lastID; //last inserted id from games table
+                Promise.all(rounds.map(round => insertRound(gameId,round)))
+                .then(() => resolve(gameId))
+                .catch(err => reject(err));
+            }
+        });
+    });
+}
+
+const insertRound = (gameId,round) => {
+    return new Promise((resolve, reject) => {
+      db.run('INSERT INTO game_rounds (game_id, round, meme_id, score) VALUES (?, ?, ?, ?)', [gameId, round.roundNumber, round.memeId, round.score], function (err) {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+};
+

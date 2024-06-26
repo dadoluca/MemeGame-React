@@ -2,9 +2,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-//import {check, validationResult} from 'express-validator';
+import {check, validationResult} from 'express-validator';
 import {getUser, getUserById} from './user_dao.mjs';
-import {getCompleteMemes, isCaptionSuitableForMeme, getSuitableCaptionsForMeme} from './meme_dao.mjs';
+import {getCompleteMemes, isCaptionSuitableForMeme, getSuitableCaptionsForMeme, saveGame} from './meme_dao.mjs';
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -52,6 +52,13 @@ passport.deserializeUser(async (id, done) => {
     done(err);
   }
 });
+
+const isLoggedIn = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    return next();
+  }
+  return res.status(401).json({error: 'Not authorized'});
+}
 
 app.use(session({
   secret: "shhhhh... it's a secret!",
@@ -101,6 +108,7 @@ app.delete('/api/sessions/current', (req, res) => {
 
 app.get('/api/memes/random', async (req, res) => {
   try {
+    //TODO usare isLoggedIn
       const memeCount = req.isAuthenticated() ? 3 : 1;
       const completeMemes = await getCompleteMemes(memeCount);
 
@@ -128,7 +136,6 @@ app.post('/api/memes/is-correct', async (req, res) => {
   try {
       const isSuitable = await isCaptionSuitableForMeme(memeId, captionId);
       let suitableCaptions = isSuitable ? [] :  await getSuitableCaptionsForMeme(memeId, allCaptionIds);
-      console.log(`isSuitable: ${isSuitable}, suitableCaptions: ${JSON.stringify(suitableCaptions)}`);
       res.json({ isSuitable: isSuitable, suitableCaptions: suitableCaptions });
 
   } catch (err) {
@@ -137,19 +144,31 @@ app.post('/api/memes/is-correct', async (req, res) => {
   }
 });
 
-/*
+app.post('/api/games', isLoggedIn, [
+  check('totalScore').isInt({ min: 0, max: 15 }),
+  //check('rounds').isArray().notEmpty(),
+  check('rounds.*.roundNumber').isInt({ min: 0 }),
+  check('rounds.*.memeId').isInt({ min: 1 }),
+  check('rounds.*.score').isInt({ min: 0, max: 5 })
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  const userId = req.user.id;  
+  const { totalScore, rounds } = req.body;
 
-app.post('/api/scores', (req, res) => {
-  const { user_id, score } = req.body;
-  db.run(`INSERT INTO scores (user_id, score) VALUES (?, ?)`, [user_id, score], function(err) {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.status(201).json({ id: this.lastID });
-  });
+  try {
+    const gameId = await saveGame(userId, totalScore, rounds);
+    console.log(`gameId: ${gameId}`);
+    res.status(201).location(gameId).end();
+
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
-*/
+
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

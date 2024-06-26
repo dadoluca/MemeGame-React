@@ -60,11 +60,22 @@ const scryptAsync = (password, salt) => {
       salt TEXT NOT NULL
     )`);
 
-    await runAsync(db, `CREATE TABLE IF NOT EXISTS scores (
+    await runAsync(db, `CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
-      score INTEGER,
+      total_score INTEGER,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id)
+    )`);
+    
+    await runAsync(db, `CREATE TABLE IF NOT EXISTS game_rounds (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      game_id INTEGER,
+      round INTEGER,
+      meme_id INTEGER,
+      score INTEGER,
+      FOREIGN KEY (game_id) REFERENCES games(id),
+      FOREIGN KEY (meme_id) REFERENCES memes(id)
     )`);
 
     await runAsync(db, `INSERT INTO memes (image_path) VALUES

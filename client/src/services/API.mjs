@@ -87,6 +87,22 @@ const verifyCaptionCorrectness = async (memeId, captionId, allCaptionIds) => {
   }
 };
 
+const saveGame = async (totalScore, rounds) => {
+  const response = await fetch(`${SERVER_URL}/api/games`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ totalScore, rounds })
+  });
+  if (response.ok) {
+      const result = await response.json();
+      return result;
+  } else {
+      throw new Error('Internal server error');
+  }
+};
 
-const API = {logIn, logOut, getUserInfo, getRandomMemes, verifyCaptionCorrectness};
+const API = {logIn, logOut, getUserInfo, getRandomMemes, verifyCaptionCorrectness, saveGame};
 export default API;
