@@ -8,13 +8,15 @@ import WrongChoiceModal from '../../components/game/modals/WrongChoiceModal';
 import styles from './GameManager.module.css';
 import API from '../../services/API.mjs';
 import { useNavigate } from 'react-router-dom';
+import { Toast, ToastContainer } from 'react-bootstrap';
 
 const GameState = {
     PLAYING: 'playing',
-    SHOW_WRONG_CHOICE: 'show_wrong_choice',
-    SHOW_TIME_OUT: 'show_time_out',
-    GAME_OVER: 'game_over',
+    SHOW_WRONG_CHOICE: 'show wrong choice',
+    SHOW_TIME_OUT: 'show time out',
+    GAME_OVER: 'game over',
 };
+
 
 const GameManager = ({ memes }) => {
 
@@ -25,6 +27,7 @@ const GameManager = ({ memes }) => {
     const [gameState, setGameState] = useState(GameState.PLAYING);
     const [correctCaptionsIds, setCorrectCaptionsIds] = useState([]);
     const [matchedMemes, setMatchedMemes] = useState([]);
+    const [showErrorSavingPopup, setShowErrorSavingPopup] = useState(false);
 
     const totalRounds = loggedIn ? 3 : 1;
 
@@ -32,10 +35,12 @@ const GameManager = ({ memes }) => {
         const meme = memes[round];
         const currentMemeCaptionsIds = meme.captions.map(c => c.id);
         const response = await API.verifyCaptionCorrectness(meme.id, caption.id, currentMemeCaptionsIds);
+
+        setMatchedMemes(prevMatchedMemes =>
+             [...prevMatchedMemes, { roundNumber:round, meme, caption, score: response.isSuitable ? 5 : 0 }]);
         if (response.isSuitable) {
             setScore(prevScore => prevScore + 5);
             setCorrectCaptionsIds([]);
-            setMatchedMemes(prevMatchedMemes => [...prevMatchedMemes, { meme, caption }]);
             increaseRound();
         } else {
             setCorrectCaptionsIds(response.suitableCaptions);
@@ -43,12 +48,26 @@ const GameManager = ({ memes }) => {
         }
     };
 
-    const increaseRound = () => {
+    const increaseRound = async () => {
         if (round + 1 < totalRounds) {
             setRound(prevRound => prevRound + 1);
             setGameState(GameState.PLAYING);
         } else {
             setGameState(GameState.GAME_OVER);
+
+            if (loggedIn) {
+                try {
+                    const rounds = matchedMemes.map((round, index) => ({
+                        roundNumber: round.roundNumber,
+                        memeId: round.meme.id,  
+                        score: round.score
+                    }));
+                    await API.saveGame(score, rounds);
+                } catch (error) {
+                    console.error("Error saving the game:", error);
+                    setShowErrorSavingPopup(true);
+                } 
+            }
         }
     };
 
@@ -62,19 +81,7 @@ const GameManager = ({ memes }) => {
         increaseRound();
     };
 
-    const handleCloseEndModal = async () => {
-        if (loggedIn) {
-            try {
-                const rounds = matchedMemes.map((meme, index) => ({
-                    roundNumber: index + 1,//MOMENTANEO      TODO SALVARE IL ROUND  e creare struttura apposita
-                    memeId: meme.meme.id,
-                    score: 5
-                }));
-                await API.saveGame(score, rounds);
-            } catch (error) {
-                console.error("Error saving the game:", error);
-            }
-        }
+    const handleCloseEndModal =  () => {
         navigate('/');//redirect to home
     };
 
@@ -105,8 +112,21 @@ const GameManager = ({ memes }) => {
                 score={score}
                 onClose={handleCloseEndModal}
                 onRematch={handleRematch}
-                matchedMemes={matchedMemes}
+                correctMatchesMemes={matchedMemes.filter(meme => meme.score > 0)}
             />
+
+
+            {/*------Error saving match from server-------
+            This is an error that does not prevent the user 
+            from continuing to play, so we warn the user with a popup*/}
+            <ToastContainer position="top-end">
+            <Toast onClose={() => setShowErrorSavingPopup(false)} show={showErrorSavingPopup}  style={{color: "red"}} delay={4000} autohide >
+                <Toast.Header>
+                <strong className="me-auto">We apologize</strong>
+                </Toast.Header>
+                <Toast.Body>Error while saving the match, we apologize.</Toast.Body>
+            </Toast>
+            </ToastContainer>
         </>
     );
 };

@@ -159,10 +159,11 @@ app.post('/api/games', isLoggedIn, [
   const { totalScore, rounds } = req.body;
 
   try {
-    const gameId = await saveGame(userId, totalScore, rounds);
-    console.log(`gameId: ${gameId}`);
-    res.status(201).location(gameId).end();
-
+    const createdRecords = await saveGame(userId, totalScore, rounds);
+    if(createdRecords === 4) //4 beacuse 3 rounds + 1 game
+      res.status(204).end();
+    else
+      throw new Error(`Error in saving the game`);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

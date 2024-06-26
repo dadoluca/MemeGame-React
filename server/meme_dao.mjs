@@ -110,6 +110,7 @@ export const getCompleteMemes = async (count) => {
 
 
 export const saveGame = (userId, totalScore, rounds) => {
+    let totalChanges = 0; // Variable to keep track of total changes
     return new Promise((resolve, reject) => {
         db.run('INSERT INTO games (user_id, total_score) VALUES (?, ?)',
         [userId, totalScore], function (err) {
@@ -117,8 +118,12 @@ export const saveGame = (userId, totalScore, rounds) => {
                 reject(err);
             } else {
                 const gameId = this.lastID; //last inserted id from games table
+                totalChanges += this.changes; 
                 Promise.all(rounds.map(round => insertRound(gameId,round)))
-                .then(() => resolve(gameId))
+                .then((changes) =>{
+                    totalChanges += changes.reduce((a, b) => a + b, 0);//sum each round changes
+                    resolve(totalChanges)
+                })
                 .catch(err => reject(err));
             }
         });
@@ -129,7 +134,7 @@ const insertRound = (gameId,round) => {
     return new Promise((resolve, reject) => {
       db.run('INSERT INTO game_rounds (game_id, round, meme_id, score) VALUES (?, ?, ?, ?)', [gameId, round.roundNumber, round.memeId, round.score], function (err) {
         if (err) reject(err);
-        else resolve();
+        else resolve(this.changes);
       });
     });
 };

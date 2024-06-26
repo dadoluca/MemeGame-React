@@ -4,7 +4,8 @@ import styles from './EndGameModal.module.css';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useContext } from 'react';
 
-const EndGameModal = ({ show, score, onClose, onRematch, matchedMemes }) => {
+const EndGameModal = ({ show, score, onClose, onRematch, correctMatchesMemes }) => {
+  console.log(correctMatchesMemes);
   const { loggedIn } = useContext(AuthContext);
 
   const handleClose = () => {
@@ -22,7 +23,7 @@ const EndGameModal = ({ show, score, onClose, onRematch, matchedMemes }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered dialogClassName={`${styles.customModalWidth} ${getModalWidthClass(matchedMemes.length)}`}>
+    <Modal show={show} onHide={handleClose} centered dialogClassName={`${styles.customModalWidth} ${getModalWidthClass(correctMatchesMemes.length)}`}>
       <Modal.Header closeButton>
         <Modal.Title>Game Over</Modal.Title>
       </Modal.Header>
@@ -30,9 +31,9 @@ const EndGameModal = ({ show, score, onClose, onRematch, matchedMemes }) => {
         {loggedIn ? (
           <>
             <h2>Your Score: {score} / 15</h2>
-            { matchedMemes.length > 0 ? <h3>Summary of Correct Matches:</h3> : <h3>You suck, play something else.</h3>}
+            { correctMatchesMemes.length > 0 ? <h3>Summary of Correct Matches:</h3> : <h3>You suck, play something else.</h3>}
             <div className={styles.matchedMemesGrid}>
-              {matchedMemes.map((match, index) => (
+              {correctMatchesMemes.map((match, index) => (
                 <div key={index} className={styles.matchedMemeItem}>
                   <img src={match.meme.imageUrl} alt="Meme" className={styles.summaryImage} />
                   <div className={styles.smallCaption}>{match.caption.caption}</div>

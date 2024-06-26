@@ -97,8 +97,7 @@ const saveGame = async (totalScore, rounds) => {
       body: JSON.stringify({ totalScore, rounds })
   });
   if (response.ok) {
-      const result = await response.json();
-      return result;
+      return null;
   } else {
       throw new Error('Internal server error');
   }
