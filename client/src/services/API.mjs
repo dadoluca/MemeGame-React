@@ -55,20 +55,6 @@ const getRandomMemes = async () => {
   else
   throw new Error('Internal server error');
 }
-/*
-const getRandomMeme = async () => {
-  const response = await fetch(`${SERVER_URL}/api/memes/random`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'}, 
-    credentials: 'include'
-  });
-  if (response.ok) {
-    const meme = await response.json();
-    return new Meme(meme.id, SERVER_URL + meme.imageUrl, meme.suitableCaptions, meme.unsuitableCaptions);
-  } else {
-    throw new Error('Internal server error');
-  }
-};*/
 
 
 const verifyCaptionCorrectness = async (memeId, captionId, allCaptionIds) => {
@@ -82,7 +68,7 @@ const verifyCaptionCorrectness = async (memeId, captionId, allCaptionIds) => {
   });
   if (response.ok) {
       const result = await response.json();
-      return { isSuitable: result.isSuitable, suitableCaptions: result.suitableCaptions };
+      return { ok:true,isSuitable: result.isSuitable, suitableCaptions: result.suitableCaptions };
   } else {
       throw new Error('Internal server error');
   }

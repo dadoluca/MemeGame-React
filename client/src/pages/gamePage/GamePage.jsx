@@ -11,7 +11,13 @@ function GamePage() {
         <div className={styles.gamePage}>
             <Suspense fallback={<p style={{ textAlign: 'center' }}>Loading...</p>}>
                 <Await resolve={memes}>
-                    {(loadedMemes) =>  <GameManager memes={loadedMemes} />}
+                    {(loadedMemes) =>  {
+                        if (loadedMemes.error) {
+                            return <p style={{ textAlign: 'center', color: 'red' }}>{loadedMemes.message}</p>;
+                        } else {
+                            return <GameManager memes={loadedMemes} />
+                        }
+                    }}
                 </Await>
             </Suspense>
         </div>
@@ -26,7 +32,7 @@ const loadMemes = async () => {
         const memes = await API.getRandomMemes();
         return memes;
     } catch (error) {
-        throw error;
+        return { error: true, message: 'Could not fetch memes.. try again later' };
     }
 };
 

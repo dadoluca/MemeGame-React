@@ -15,11 +15,14 @@ import UserProfilePage, { loader as gamesHistoryLoader } from './pages/userProfi
 
 function App() {
   const { loggedIn } = useContext(AuthContext);
-
   const router = createBrowserRouter([
     {
       element: <RootLayout/>,
-      errorElement: <ErrorPage/>,//Loading errors of a valid route
+
+      /* Loading errors of a valid route.
+      This handles route loading errors and other server errors if not handled directly in components */
+      errorElement: <ErrorPage/>,
+
       children: [
         {
           path: "/",
@@ -41,7 +44,7 @@ function App() {
         },
         {
           path: "*",
-          element: <WrongUrlPage/> //Undefined URLs 
+          element: <WrongUrlPage/> //Undefined URL
         },
         {
           path: "/error", // Test path to generate an error for testing errors display

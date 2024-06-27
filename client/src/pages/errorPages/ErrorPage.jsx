@@ -1,6 +1,5 @@
 import { useRouteError } from 'react-router-dom';
 import NavHeader from '../../components/layout/NavHeader';
-
 import PageContent from '../../components/layout/PageContent';
 
 function ErrorPage() {
@@ -9,11 +8,11 @@ function ErrorPage() {
   let title = 'An error occurred!';
   let message = 'Something went wrong!';
 
-  if (error.status === 500) {
+  if (error && error.status === 500) {
     message = 'Our fault. We are working on fixing it!';
   }
 
-  if (error.status === 404) {
+  if (error && error.status === 404) {
     title = 'Not found!';
     message = 'Could not find resource or page.';
   }

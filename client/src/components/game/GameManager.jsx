@@ -29,30 +29,33 @@ const GameManager = ({ memes }) => {
     const [gameState, setGameState] = useState(GameState.PLAYING);
     const [correctCaptionsIds, setCorrectCaptionsIds] = useState([]);
     const [matchedMemes, setMatchedMemes] = useState([]);
-    const [showErrorSavingPopup, setShowErrorSavingPopup] = useState(false);
+    const [showErrorPopup, setShowErrorPopup] = useState({ show: false, message: '' });
     
     const totalRounds = loggedIn ? 3 : 1;
 
     const handleCaptionClick = async (caption) => {
         const meme = memes[round];
         const currentMemeCaptionsIds = meme.captions.map(c => c.id);
-        const response = await API.verifyCaptionCorrectness(meme.id, caption.id, currentMemeCaptionsIds);
-
-        
-        setMatchedMemes(prevMatchedMemes => 
-            [...prevMatchedMemes, { roundNumber: round, meme, caption, score: response.isSuitable ? 5 : 0 }]);
-
-        if (response.isSuitable) {
-            setScore(prevScore => prevScore + 5);
-            setCorrectCaptionsIds([]);
-            setGameState(GameState.SHOW_CORRECT_CHOICE); 
-            setTimeout(() => increaseRound(), 2000); // Automatically proceed to the next round after 2 second
-        } else {
-            setCorrectCaptionsIds(response.suitableCaptions);
-            if(caption.id==-1)
-                setGameState(GameState.SHOW_TIME_OUT);
-            else
-                setGameState(GameState.SHOW_WRONG_CHOICE);
+        try{
+            const response = await API.verifyCaptionCorrectness(meme.id, caption.id, currentMemeCaptionsIds);
+            setMatchedMemes(prevMatchedMemes => 
+                [...prevMatchedMemes, { roundNumber: round, meme, caption, score: response.isSuitable ? 5 : 0 }]);
+    
+            if (response.isSuitable) {
+                setScore(prevScore => prevScore + 5);
+                setCorrectCaptionsIds([]);
+                setGameState(GameState.SHOW_CORRECT_CHOICE); 
+                setTimeout(() => increaseRound(), 2000); // Automatically proceed to the next round after 2 second
+            } else {
+                setCorrectCaptionsIds(response.suitableCaptions);
+                if(caption.id==-1)
+                    setGameState(GameState.SHOW_TIME_OUT);
+                else
+                    setGameState(GameState.SHOW_WRONG_CHOICE);
+            }
+        }
+        catch(error){
+            setShowErrorPopup({ show: true, message: error });
         }
     };
 
@@ -76,8 +79,7 @@ const GameManager = ({ memes }) => {
                     }));
                     await API.saveGame(score, rounds);
                 } catch (error) {
-                    console.error("Error saving the game:", error);
-                    setShowErrorSavingPopup(true);
+                    setShowErrorPopup({ show: true, message: 'Error saving the game' });
                 }
             }
         };
@@ -140,11 +142,11 @@ const GameManager = ({ memes }) => {
             This is an error that does not prevent the user 
             from continuing to play, so we warn the user with a popup*/}
             <ToastContainer position="top-end">
-            <Toast onClose={() => setShowErrorSavingPopup(false)} show={showErrorSavingPopup}  style={{color: "red"}} delay={4000} autohide >
+            <Toast onClose={() => setShowErrorPopup({ show: false, message: '' })} show={showErrorPopup.show}  style={{color: "red"}} delay={4000} autohide >
                 <Toast.Header>
                 <strong className="me-auto">We apologize</strong>
                 </Toast.Header>
-                <Toast.Body>Error while saving the match, we apologize.</Toast.Body>
+                <Toast.Body>{showErrorPopup.message}</Toast.Body>
             </Toast>
             </ToastContainer>
         </>

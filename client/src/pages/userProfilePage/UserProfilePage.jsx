@@ -12,14 +12,16 @@ function UserProfilePage() {
       <h2 style={{ marginBottom: '40px' }}>{user.name}'s Profile</h2>
       <h4>Game History</h4>
       <Suspense fallback={<p>Loading game history...</p>}>
-        <Await resolve={gameHistory}>
-          {(loadedGameHistory) => (
-            loadedGameHistory.length === 0 ? (
-              <p>No games played yet.</p>
-            ) : (
-              loadedGameHistory.map(game => <PastGameCard key={game.date} game={game} />)
-            )
-          )}
+      <Await resolve={gameHistory}>
+          {(loadedGameHistory) => {
+            if (loadedGameHistory.error) {
+              return <p style={{ color: 'red' }}> {loadedGameHistory.message}</p>;
+            } else if (loadedGameHistory.length === 0) {
+              return <p>No games played yet.</p>;
+            } else {
+              return loadedGameHistory.map(game => <PastGameCard key={game.date} game={game} />);
+            }
+          }}
         </Await>
       </Suspense>
     </div>
@@ -33,7 +35,7 @@ const loadUserGameHistory = async () => {
     const games = await API.getUserGameHistory();
     return games;
   } catch (error) {
-    throw error;
+    return { error: true, message: 'Could not fetch game history.. try again later' };
   }
 };
 
