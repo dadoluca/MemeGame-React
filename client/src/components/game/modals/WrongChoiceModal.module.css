@@ -1,10 +1,9 @@
 .captionList {
-    list-style-type: none;
-    padding: 0;
-  }
+  padding: 15px;
+}
   
   .captionItem {
-    margin: 10px 0;
+    margin: px 0;
     font-weight: bold;
   }
   

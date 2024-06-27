@@ -10,7 +10,7 @@ const GameInfo = ({ round, totalRounds, score }) => {
       <Card.Body>
         <Card.Title>Game Info</Card.Title>
         <Card.Text>Player: {loggedIn ? user.name : "Not Logged"}</Card.Text>
-        <Card.Text>Round: {round}/{totalRounds}</Card.Text>
+        <Card.Text>Round: {round + 1}/{totalRounds}</Card.Text>
         <Card.Text>Score: {score}/{totalRounds * 5}</Card.Text>
       </Card.Body>
     </Card>
