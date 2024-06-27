@@ -7,9 +7,9 @@ const MemeCard = ({ imageUrl, captions, onCaptionClick }) => {
     return (
         <Container className={styles.container}>
             <Row className="justify-content-md-center">
-                <Col md="12">
+                <Col md="9">
                     <Card className={styles.card}>
-                        <Card.Body>
+                        <Card.Body className={styles.cardBody}>
                             {imageUrl && (
                                 <Image
                                     src={imageUrl}

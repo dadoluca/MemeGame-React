@@ -10,7 +10,7 @@ function RootLayout(){
         <main>
             <NavHeader/>
             <Container fluid className='mt-3'>
-                {message && <Row>
+                {message && <Row style={{ position: 'absolute', top: '10vh', width: '100%', zIndex: 1000 }}>
                 <Alert variant={message.type} onClose={() => setMessage('')} dismissible>{message.msg}</Alert>
                 </Row> }
                 <Outlet/>

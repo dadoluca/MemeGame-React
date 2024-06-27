@@ -1,14 +1,14 @@
 .gameInfo {
-    position: fixed;
-    left: 2vw;
-    width: 16vw; 
-    z-index: 1000;
-    padding: 5px; 
-    border-radius: 8px; 
-  }
+  position: fixed;
+  left: 2vw;
+  width: 16vw; 
+  z-index: 1000;
+  padding: 5px; 
+  border-radius: 8px; 
+}
   
-  @media (max-width: 768px) {
-    .gameInfo {
-      display: none; /* Nascondi l'elemento sui schermi piccoli */
-    }
+@media (max-width: 768px) {
+  .gameInfo {
+    display: none; /* Nascondi l'elemento sui schermi piccoli */
   }
+}

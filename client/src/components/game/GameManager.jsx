@@ -9,7 +9,7 @@ import styles from './GameManager.module.css';
 import API from '../../services/API.mjs';
 import { useNavigate } from 'react-router-dom';
 import { Toast, ToastContainer } from 'react-bootstrap';
-
+import { Container } from 'react-bootstrap';
 const GameState = {
     PLAYING: 'playing',
     SHOW_WRONG_CHOICE: 'show wrong choice',
@@ -49,29 +49,6 @@ const GameManager = ({ memes }) => {
             setGameState(GameState.SHOW_WRONG_CHOICE);
         }
     };
-
-    /*const increaseRound = async() => {
-        if (round + 1 < totalRounds) {
-            setRound(prevRound => prevRound + 1);
-            setGameState(GameState.PLAYING);
-        } else {
-            setGameState(GameState.GAME_OVER);
-            if (loggedIn) {
-                try {
-                    const rounds = matchedMemes.map((round, index) => ({
-                        roundNumber: round.roundNumber,
-                        memeId: round.meme.id,  
-                        score: round.score
-                    }));
-                    console.log(rounds);
-                    await API.saveGame(score, rounds);
-                } catch (error) {
-                    console.error("Error saving the game:", error);
-                    setShowErrorSavingPopup(true);
-                } 
-            }
-        }
-    };*/
 
     const increaseRound = () => {
         if (round + 1 < totalRounds) {
@@ -122,7 +99,7 @@ const GameManager = ({ memes }) => {
 
     return (
         <>
-            <div className={styles.gameContent}>
+            <Container className={styles.gameContent}>
                 <h1 style={{ marginBottom: "20px" }}>What do you meme?</h1>
                 <GameInfo round={round} totalRounds={totalRounds} score={score} />
                 <Timer duration={30} onTimeUp={handleTimeUp} round={round} gameOver={gameState === GameState.GAME_OVER} />
@@ -131,7 +108,7 @@ const GameManager = ({ memes }) => {
                     captions={memes[round].captions}
                     onCaptionClick={handleCaptionClick}
                 />
-            </div>
+            </Container>
 
             <WrongChoiceModal
                 show={gameState === GameState.SHOW_WRONG_CHOICE || gameState === GameState.SHOW_TIME_OUT}

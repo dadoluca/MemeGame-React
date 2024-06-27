@@ -32,8 +32,8 @@ function LoginForm() {
         </Form.Group>
 
         <div className={styles.buttonContainer}>
-          <Link className='btn btn-danger w-100 ' to={'/'}>Cancel</Link>
-          <Button type='submit' className="w-100 ms-2">Login</Button>
+          <Link className='btn btn-light w-100 border-dark' to={'/'}>Cancel</Link>
+          <Button type='submit' className="btn-dark w-100 ms-2">Login</Button>
       </div>
     </Form>
   )

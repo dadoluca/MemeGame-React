@@ -49,11 +49,11 @@ const EndGameModal = ({ show, score, onClose, onRematch, correctMatchesMemes }) 
         )}
       </Modal.Body>
       <Modal.Footer className={styles.modalFooter}>
-        <Button variant="primary" onClick={handleClose} className={styles.button}>
+        <Button variant="light border-dark" onClick={handleClose} className={styles.button}>
           Back to Home
         </Button>
         {loggedIn && (
-          <Button variant="success" onClick={handleRematch} className={styles.button}>
+          <Button variant="dark" onClick={handleRematch} className={styles.button}>
             Play Again
           </Button>
         )}

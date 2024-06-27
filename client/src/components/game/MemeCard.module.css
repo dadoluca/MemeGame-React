@@ -1,22 +1,36 @@
 .container {
     display: flex;
+    align-items: center;
     justify-content: center;
-    min-height: 88vh; /*navbar max 12 vh*/
 }
 
 .card {
     text-align: center; 
     width: auto;
-    min-width: 50vw;
-    max-width: 620px;
     margin: auto;
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 20px; /* Add some space between image and captions */
 }
 
 .image {
     max-height: 200px;
-    max-width: 700px;
+    max-width: 400px; /* Adjust width to fit within the layout */
     object-fit: contain;
     margin-bottom: 20px;
     border-radius: 10px; /* borders */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* shadow */
-  }
+}
+
+.captions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    /*overflow-y: auto;  Scroll if captions exceed max height */
+}

@@ -9,7 +9,7 @@ function NavHeader() {
   const { loggedIn } = useContext(AuthContext);
 
   return (
-    <Navbar bg='primary' data-bs-theme='dark' style={{ maxHeight: '12vh' }}>
+    <Navbar bg='dark' data-bs-theme='dark' style={{ height: '9vh', minHeight: '30px'}}>
       <Container fluid>
         <Link to='/' className='navbar-brand'>Memes Game</Link>
         <div>
@@ -20,7 +20,7 @@ function NavHeader() {
           }
           {loggedIn ? 
             <LogoutButton/> :
-            <Link to='/login' className='btn btn-outline-light'>Login</Link>
+            <Link to='/login' className='bg-dark  btn btn-outline-light'>Login</Link>
           }
         </div>
       </Container>

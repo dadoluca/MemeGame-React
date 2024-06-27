@@ -17,7 +17,7 @@ const WrongChoiceModal = ({ show, onClose, correctCaptions }) => {
         </ul>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={onClose}>
+        <Button variant="dark" onClick={onClose}>
           Close
         </Button>
       </Modal.Footer>
