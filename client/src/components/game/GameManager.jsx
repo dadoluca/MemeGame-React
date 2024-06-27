@@ -5,6 +5,7 @@ import GameInfo from '../../components/game/GameInfo';
 import Timer from '../../components/game/Timer';
 import EndGameModal from '../../components/game/modals/EndGameModal';
 import WrongChoiceModal from '../../components/game/modals/WrongChoiceModal';
+import CorrectChoiceModal from '../../components/game/modals/CorrectChoiceModal'; 
 import styles from './GameManager.module.css';
 import API from '../../services/API.mjs';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,7 @@ const GameState = {
     PLAYING: 'playing',
     SHOW_WRONG_CHOICE: 'show wrong choice',
     SHOW_TIME_OUT: 'show time out',
+    SHOW_CORRECT_CHOICE: 'show correct choice',
     GAME_OVER: 'game over',
 };
 
@@ -43,7 +45,8 @@ const GameManager = ({ memes }) => {
         if (response.isSuitable) {
             setScore(prevScore => prevScore + 5);
             setCorrectCaptionsIds([]);
-            increaseRound();
+            setGameState(GameState.SHOW_CORRECT_CHOICE); 
+            setTimeout(() => increaseRound(), 2000); // Automatically proceed to the next round after 2 second
         } else {
             setCorrectCaptionsIds(response.suitableCaptions);
             if(caption.id==-1)
@@ -104,7 +107,7 @@ const GameManager = ({ memes }) => {
             <Container className={styles.gameContent}>
                 <h1 style={{ marginBottom: "20px" }}>What do you meme?</h1>
                 <GameInfo round={round} totalRounds={totalRounds} score={score} />
-                <Timer duration={3} onTimeUp={handleTimeUp} round={round} stopTimer={gameState !== GameState.PLAYING} />
+                <Timer duration={30} onTimeUp={handleTimeUp} round={round} stopTimer={gameState !== GameState.PLAYING} />
                 <MemeCard
                     imageUrl={memes[round].imageUrl}
                     captions={memes[round].captions}
@@ -118,6 +121,12 @@ const GameManager = ({ memes }) => {
                 correctCaptions={memes[round]?.captions.filter(c => correctCaptionsIds.includes(c.id))}
                 timeout={gameState === GameState.SHOW_TIME_OUT}
             />
+            
+            <CorrectChoiceModal
+                show={gameState === GameState.SHOW_CORRECT_CHOICE} // Show correct choice modal when needed
+                onClose={() => setGameState(GameState.PLAYING)} // Close the modal and continue playing
+            />
+
             <EndGameModal
                 show={gameState === GameState.GAME_OVER}
                 score={score}
