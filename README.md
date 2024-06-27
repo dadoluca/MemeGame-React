@@ -32,19 +32,6 @@
 -->
 - **Error Handling**: errorElement: *`ErrorPage`* - Displays an error page if there is an issue loading any of the valid routes in the application. It handles also server errors if not handled directly in components.
 
-## API Server
-
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- GET `/api/something`
-  - request parameters
-  - response body content
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- ...
-
 
 ## API Server
 
@@ -276,26 +263,87 @@
     ```
 
 
-
 ## Database Tables
 
-- Table `users` - contains xx yy zz
-- Table `something` - contains ww qq ss
-- ...
+- Table `memes`
+  - `id`: integer, primary key
+  - `image_path`: text, not null
+  - `description`: text
+
+- Table `captions`
+  - `id`: integer, primary key
+  - `caption`: text, not null
+
+- Table `meme_captions`
+  - `id`: integer, primary key
+  - `meme_id`: integer
+  - `caption_id`: integer
+  - `is_suitable`: boolean
+  - Foreign key (`meme_id`) references `memes(id)`
+  - Foreign key (`caption_id`) references `captions(id)`
+
+- Table `users`
+  - `id`: integer, primary key
+  - `name`: text, not null
+  - `email`: text, not null, unique
+  - `password`: text, not null (hashed password)
+  - `salt`: text, not null
+
+- Table `games`
+  - `id`: integer, primary key
+  - `user_id`: integer
+  - `total_score`: integer
+  - `created_at`: timestamp, default current_timestamp
+  - Foreign key (`user_id`) references `users(id)`
+
+- Table `game_rounds`
+  - `id`: integer, primary key
+  - `game_id`: integer
+  - `round`: integer
+  - `meme_id`: integer
+  - `score`: integer
+  - Foreign key (`game_id`) references `games(id)`
+  - Foreign key (`meme_id`) references `memes(id)`
+
 
 ## Main React Components
 
-- `ListOfSomething` (in `List.js`): component purpose and main functionality
-- `GreatButton` (in `GreatButton.js`): component purpose and main functionality
-- ...
+- `HomePage` (in `HomePage.js`): Displays the main page of the Meme Game application. Includes a welcome message, an image, and a description of the game. Provides a "PLAY" button that navigates to the game page (`/game`) when clicked.
 
-(only _main_ components, minor ones may be skipped)
+- `GamePage` (in `GamePage.js`): Renders a game page with a loading indicator while fetching memes data asynchronously. Utilizes `Suspense` and `Await` components from React Router DOM for data handling. Displays an error message if meme fetching fails; otherwise, renders the `GameManager` component with the loaded memes.
+
+- `GameManager` (in `GameManager.js`): Manages the gameplay for the Meme Game. Handles game states such as playing, showing wrong choice, showing timeout, showing correct choice, and game over. Features include displaying game information (round, total rounds, score), managing timers for each round, and handling user interaction with meme cards and captions. Provides modals for displaying wrong choice, correct choice, and end game scenarios. Includes error handling for saving game data and displays error messages in a toast notification.
+
+- `MemeCard` (in `MemeCard.js`): Displays a card with a random meme image and a list of captions associated with it. Allows users to click on captions to select them. 
+
+- `EndGameModal` (in `EndGameModal.js`): Displays a modal dialog when the game is over. Shows the player's score out of 15, and if logged in, provides a summary of correct matches made during the game. Allows the player to return to the home page or play again. 
+
+- `UserProfilePage` (in `UserProfilePage.js`): Displays the user's profile page with their name and game history. Uses `Suspense` and `Await` components from React Router DOM for data loading. Shows a loading message while fetching game history asynchronously. If there's an error fetching the data, displays an error message. If the user has no game history yet, shows a message indicating no games played. Otherwise, renders `PastGameCard` components for each game in the user's history.
+
+- `PastGameCard` (in `PastGameCard.js`): Displays a card representing a past game session. Shows the date of the game, total score, and details for each round played. Each round includes the round number, an image related to the round, and the score earned. The image border and score text color change based on whether the score is positive or negative.
 
 ## Screenshot
-
-![Screenshot](./img/screenshot.jpg)
+<div style="display: flex;">
+    <img src="img/d.png" width="400" style="margin-right: 15px;" alt="Test Image 1">
+    <img src="img/a.png" width="400" alt="Test Image 2">
+</div>
+-
+<!--
+<div style="display: flex;">
+    <img src="img/b.png" width="400"  style="margin-right: 15px;" alt="Test Image 3">
+    <img src="img/c.png" width="400" alt="Test Image 4">
+</div>
+-->
+<div style="display: flex;">
+    <img src="img/e.png" width="400"  style="margin-right: 15px;" alt="Test Image 5">
+    <img src="img/f.png" width="400" alt="Test Image 6">
+</div>
 
 ## Users Credentials
 
-- username, password (plus any other requested info)
-- username, password (plus any other requested info)
+
+| Username  | Password  | 
+|-----------------|--------------------|
+| luca.dadone01@gmail.com     | lucadadone |  
+| luigi.de.russis@gmail.com   | luigiderussis |  
+| luca.mannella@gmail.com    | lucamannella |  
