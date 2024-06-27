@@ -46,7 +46,10 @@ const GameManager = ({ memes }) => {
             increaseRound();
         } else {
             setCorrectCaptionsIds(response.suitableCaptions);
-            setGameState(GameState.SHOW_WRONG_CHOICE);
+            if(caption.id==-1)
+                setGameState(GameState.SHOW_TIME_OUT);
+            else
+                setGameState(GameState.SHOW_WRONG_CHOICE);
         }
     };
 
@@ -80,8 +83,7 @@ const GameManager = ({ memes }) => {
     }, [gameState, matchedMemes]);
 
     const handleTimeUp = () => {
-        setCorrectCaptionsIds(memes[round].captions.map(c => c.id));
-        setGameState(GameState.SHOW_TIME_OUT);
+        handleCaptionClick({id: -1});//-1 is the id of the time out caption
     };
 
     const handleCloseWrongChoiceModal = () => {
@@ -102,7 +104,7 @@ const GameManager = ({ memes }) => {
             <Container className={styles.gameContent}>
                 <h1 style={{ marginBottom: "20px" }}>What do you meme?</h1>
                 <GameInfo round={round} totalRounds={totalRounds} score={score} />
-                <Timer duration={30} onTimeUp={handleTimeUp} round={round} gameOver={gameState === GameState.GAME_OVER} />
+                <Timer duration={3} onTimeUp={handleTimeUp} round={round} stopTimer={gameState !== GameState.PLAYING} />
                 <MemeCard
                     imageUrl={memes[round].imageUrl}
                     captions={memes[round].captions}
@@ -114,6 +116,7 @@ const GameManager = ({ memes }) => {
                 show={gameState === GameState.SHOW_WRONG_CHOICE || gameState === GameState.SHOW_TIME_OUT}
                 onClose={handleCloseWrongChoiceModal}
                 correctCaptions={memes[round]?.captions.filter(c => correctCaptionsIds.includes(c.id))}
+                timeout={gameState === GameState.SHOW_TIME_OUT}
             />
             <EndGameModal
                 show={gameState === GameState.GAME_OVER}

@@ -128,7 +128,6 @@ app.get('/api/memes/random', async (req, res) => {
  */
 app.post('/api/memes/is-correct', async (req, res) => {
   const { memeId, captionId, allCaptionIds } = req.body;
-  
   if (!memeId || !captionId || !allCaptionIds) {
       return res.status(400).json({ error: 'Meme ID, Caption ID and all Caption IDs are required' });
   }
