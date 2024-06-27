@@ -46,10 +46,10 @@ function App() {
           path: "*",
           element: <WrongUrlPage/> //Undefined URL
         },
-        {
+        /*{
           path: "/error", // Test path to generate an error for testing errors display
           element: <ErrorComponent />
-        },
+        },*/
       ],
     },
   
