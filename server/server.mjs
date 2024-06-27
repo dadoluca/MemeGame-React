@@ -108,7 +108,6 @@ app.delete('/api/sessions/current', (req, res) => {
 
 app.get('/api/memes/random', async (req, res) => {
   try {
-    //TODO usare isLoggedIn
       const memeCount = req.isAuthenticated() ? 3 : 1;
       const completeMemes = await getCompleteMemes(memeCount);
 
@@ -138,14 +137,12 @@ app.post('/api/memes/is-correct', async (req, res) => {
       res.json({ isSuitable: isSuitable, suitableCaptions: suitableCaptions });
 
   } catch (err) {
-      console.error(`ERROR: ${err.message}`);
       res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 app.post('/api/games', isLoggedIn, [
   check('totalScore').isInt({ min: 0, max: 15 }),
-  //check('rounds').isArray().notEmpty().isLength({ min: 3, max: 3 }),
   check('rounds.*.roundNumber').isInt({ min: 0 }),
   check('rounds.*.memeId').isInt({ min: 1 }),
   check('rounds.*.score').isInt({ min: 0, max: 5 })
