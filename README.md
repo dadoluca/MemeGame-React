@@ -2,18 +2,18 @@
 
 ## Screenshot
 <div style="display: flex;">
-    <img src="img/d.png" width="500" style="margin-right: 15px;" alt="Test Image 1">
-    <img src="img/a.png" width="500" alt="Test Image 2">
+    <img src="img/d.png" width="400" style="margin-right: 15px;" alt="Test Image 1">
+    <img src="img/a.png" width="400" alt="Test Image 2">
 </div>
 
 <div style="display: flex;">
-    <img src="img/b.png" width="500"  style="margin-right: 15px;" alt="Test Image 3">
-    <img src="img/c.png" width="500" alt="Test Image 4">
+    <img src="img/b.png" width="400"  style="margin-right: 15px;" alt="Test Image 3">
+    <img src="img/c.png" width="400" alt="Test Image 4">
 </div>
 
 <div style="display: flex;">
-    <img src="img/e.png" width="500"  style="margin-right: 15px;" alt="Test Image 5">
-    <img src="img/f.png" width="500" alt="Test Image 6">
+    <img src="img/e.png" width="400"  style="margin-right: 15px;" alt="Test Image 5">
+    <img src="img/f.png" width="400" alt="Test Image 6">
 </div>
 
 ## React Client Application Routes
