@@ -1,20 +1,23 @@
 # React Game: What do you meme?
 
-## Screenshot
 <div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="img/d.png" width="300" style="margin-right: 15px;" alt="Test Image 1">
-    <img src="img/a.png" width="300" alt="Test Image 2">
+    <img src="img/d.png" width="400" alt="Test Image 1">
+    <img src="img/a.png" width="400" alt="Test Image 2">
 </div>
-&nbsp;
-<div style="display: flex;">
-    <img src="img/b.png" width="300"  style="margin-right: 15px;" alt="Test Image 3">
-    <img src="img/c.png" width="300" alt="Test Image 4">
+
+
+<!--
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="img/b.png" width="350"   alt="Test Image 3">
+    <img src="img/c.png" width="350" alt="Test Image 4">
 </div>
-&nbsp;
-<div style="display: flex;">
-    <img src="img/e.png" width="300"  style="margin-right: 15px;" alt="Test Image 5">
-    <img src="img/f.png" width="300" alt="Test Image 6">
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="img/e.png" width="350"   alt="Test Image 5">
+    <img src="img/f.png" width="350" alt="Test Image 6">
 </div>
+-->
+
 
 ## React Client Application Routes
 
